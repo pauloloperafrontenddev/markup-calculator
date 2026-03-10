@@ -1,0 +1,74 @@
+# ────────────────────────────────────────────────────────────────────────────
+# Production — docker-compose.prod.yml
+#
+# Usage:
+#   docker compose -f docker-compose.prod.yml up -d        → start in background
+#   docker compose -f docker-compose.prod.yml up --build   → rebuild image
+#   docker compose -f docker-compose.prod.yml down         → stop
+#   docker compose -f docker-compose.prod.yml logs -f      → logs
+#
+# Env vars:
+#   VITE_* vars are baked into the client bundle at build time via build.args.
+#   Server-only secrets (SUPABASE_SERVICE_ROLE_KEY etc.) are runtime env vars.
+#   Never commit .env.production — see .env.production.example for the template.
+#
+# SSL:
+#   Mount your cert files into the nginx container.
+#   Update nginx/nginx.docker.prod.conf with your domain name.
+#   Recommended: use certbot with --webroot or DNS challenge externally,
+#   then mount /etc/letsencrypt into the nginx service.
+# ────────────────────────────────────────────────────────────────────────────
+
+services:
+  # ── App (production SSR server) ─────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      # VITE_ vars must be set at build time — they get baked into the client JS bundle.
+      # Pass them via .env.production or CI secrets, never hardcode here.
+      args:
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    image: markup-calculator:latest
+    env_file:
+      # Runtime secrets — NEVER commit this file. See .env.production.example.
+      - .env.production
+    environment:
+      - NODE_ENV=production
+    expose:
+      - "3000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:3000/ 2>/dev/null; [ $$? -ne 4 ]"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    # Resource limits — adjust for your server
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # ── Nginx reverse proxy (HTTPS termination) ─────────────────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.docker.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      # SSL certificates — managed externally (e.g. certbot on host)
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M

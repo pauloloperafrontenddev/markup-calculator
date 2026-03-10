@@ -1,0 +1,63 @@
+# ────────────────────────────────────────────────────────────────────────────
+# Development — app only (Supabase runs in the cloud)
+#   app   → TanStack Start dev server (hot reload via bind mount)
+#   nginx → Reverse proxy → http://localhost
+#
+# Usage:
+#   docker compose up --build    → first run / rebuild
+#   docker compose up            → normal start
+#   docker compose logs -f app   → app logs
+# ────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  ###########################################################################
+  # ── App (TanStack Start dev server + Vite HMR) ───────────────────────── #
+  ###########################################################################
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development
+      - DOCKER_DEV=true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:3000/ 2>/dev/null; [ $$? -ne 4 ]"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    networks:
+      - app
+
+  ###########################################################################
+  # ── Nginx reverse proxy ──────────────────────────────────────────────── #
+  ###########################################################################
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.docker.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app
+
+networks:
+  app:
+
+volumes:
+  app_node_modules:

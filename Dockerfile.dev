@@ -1,0 +1,26 @@
+# ────────────────────────────────────────────────────────────────────────────
+# Development Dockerfile — hot reload via bind mounts
+# Source code is NOT copied — it's mounted from the host at run time.
+# ────────────────────────────────────────────────────────────────────────────
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat
+
+# Copy only manifests first so the npm ci layer is cached separately from source.
+# When only source files change, Docker reuses this cached layer.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+EXPOSE 3000
+
+ENV NODE_ENV=development
+# Signals Vite config to enable polling-based file watching.
+# Polling is more reliable than inotify for Docker bind mounts across
+# Linux, Mac (osxfs/virtiofs), and Windows (WSL2).
+ENV DOCKER_DEV=true
+
+# Source code is mounted at runtime via docker-compose volumes.
+CMD ["npm", "run", "dev"]

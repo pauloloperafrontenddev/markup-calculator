@@ -9,38 +9,200 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as CalculatorRouteImport } from './routes/calculator'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedQuotesIndexRouteImport } from './routes/_authenticated/quotes/index'
+import { Route as AuthenticatedMaintenanceIndexRouteImport } from './routes/_authenticated/maintenance/index'
+import { Route as QuoteViewQuoteIdRouteImport } from './routes/quote/view/$quoteId'
+import { Route as AuthenticatedQuotesNewRouteImport } from './routes/_authenticated/quotes/new'
+import { Route as AuthenticatedMaintenanceVolumeTiersRouteImport } from './routes/_authenticated/maintenance/volume-tiers'
+import { Route as AuthenticatedMaintenanceUsersRouteImport } from './routes/_authenticated/maintenance/users'
+import { Route as AuthenticatedMaintenanceSettingsRouteImport } from './routes/_authenticated/maintenance/settings'
+import { Route as AuthenticatedMaintenanceItemSetsRouteImport } from './routes/_authenticated/maintenance/item-sets'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculatorRoute = CalculatorRouteImport.update({
+  id: '/calculator',
+  path: '/calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedQuotesIndexRoute =
+  AuthenticatedQuotesIndexRouteImport.update({
+    id: '/quotes/',
+    path: '/quotes/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaintenanceIndexRoute =
+  AuthenticatedMaintenanceIndexRouteImport.update({
+    id: '/maintenance/',
+    path: '/maintenance/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const QuoteViewQuoteIdRoute = QuoteViewQuoteIdRouteImport.update({
+  id: '/quote/view/$quoteId',
+  path: '/quote/view/$quoteId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedQuotesNewRoute = AuthenticatedQuotesNewRouteImport.update({
+  id: '/quotes/new',
+  path: '/quotes/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMaintenanceVolumeTiersRoute =
+  AuthenticatedMaintenanceVolumeTiersRouteImport.update({
+    id: '/maintenance/volume-tiers',
+    path: '/maintenance/volume-tiers',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaintenanceUsersRoute =
+  AuthenticatedMaintenanceUsersRouteImport.update({
+    id: '/maintenance/users',
+    path: '/maintenance/users',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaintenanceSettingsRoute =
+  AuthenticatedMaintenanceSettingsRouteImport.update({
+    id: '/maintenance/settings',
+    path: '/maintenance/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaintenanceItemSetsRoute =
+  AuthenticatedMaintenanceItemSetsRouteImport.update({
+    id: '/maintenance/item-sets',
+    path: '/maintenance/item-sets',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calculator': typeof CalculatorRoute
+  '/login': typeof LoginRoute
+  '/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
+  '/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
+  '/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
+  '/maintenance/volume-tiers': typeof AuthenticatedMaintenanceVolumeTiersRoute
+  '/quotes/new': typeof AuthenticatedQuotesNewRoute
+  '/quote/view/$quoteId': typeof QuoteViewQuoteIdRoute
+  '/maintenance/': typeof AuthenticatedMaintenanceIndexRoute
+  '/quotes/': typeof AuthenticatedQuotesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calculator': typeof CalculatorRoute
+  '/login': typeof LoginRoute
+  '/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
+  '/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
+  '/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
+  '/maintenance/volume-tiers': typeof AuthenticatedMaintenanceVolumeTiersRoute
+  '/quotes/new': typeof AuthenticatedQuotesNewRoute
+  '/quote/view/$quoteId': typeof QuoteViewQuoteIdRoute
+  '/maintenance': typeof AuthenticatedMaintenanceIndexRoute
+  '/quotes': typeof AuthenticatedQuotesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/calculator': typeof CalculatorRoute
+  '/login': typeof LoginRoute
+  '/_authenticated/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
+  '/_authenticated/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
+  '/_authenticated/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
+  '/_authenticated/maintenance/volume-tiers': typeof AuthenticatedMaintenanceVolumeTiersRoute
+  '/_authenticated/quotes/new': typeof AuthenticatedQuotesNewRoute
+  '/quote/view/$quoteId': typeof QuoteViewQuoteIdRoute
+  '/_authenticated/maintenance/': typeof AuthenticatedMaintenanceIndexRoute
+  '/_authenticated/quotes/': typeof AuthenticatedQuotesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/calculator'
+    | '/login'
+    | '/maintenance/item-sets'
+    | '/maintenance/settings'
+    | '/maintenance/users'
+    | '/maintenance/volume-tiers'
+    | '/quotes/new'
+    | '/quote/view/$quoteId'
+    | '/maintenance/'
+    | '/quotes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/calculator'
+    | '/login'
+    | '/maintenance/item-sets'
+    | '/maintenance/settings'
+    | '/maintenance/users'
+    | '/maintenance/volume-tiers'
+    | '/quotes/new'
+    | '/quote/view/$quoteId'
+    | '/maintenance'
+    | '/quotes'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/calculator'
+    | '/login'
+    | '/_authenticated/maintenance/item-sets'
+    | '/_authenticated/maintenance/settings'
+    | '/_authenticated/maintenance/users'
+    | '/_authenticated/maintenance/volume-tiers'
+    | '/_authenticated/quotes/new'
+    | '/quote/view/$quoteId'
+    | '/_authenticated/maintenance/'
+    | '/_authenticated/quotes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CalculatorRoute: typeof CalculatorRoute
+  LoginRoute: typeof LoginRoute
+  QuoteViewQuoteIdRoute: typeof QuoteViewQuoteIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +210,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/quotes/': {
+      id: '/_authenticated/quotes/'
+      path: '/quotes'
+      fullPath: '/quotes/'
+      preLoaderRoute: typeof AuthenticatedQuotesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/maintenance/': {
+      id: '/_authenticated/maintenance/'
+      path: '/maintenance'
+      fullPath: '/maintenance/'
+      preLoaderRoute: typeof AuthenticatedMaintenanceIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/quote/view/$quoteId': {
+      id: '/quote/view/$quoteId'
+      path: '/quote/view/$quoteId'
+      fullPath: '/quote/view/$quoteId'
+      preLoaderRoute: typeof QuoteViewQuoteIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/quotes/new': {
+      id: '/_authenticated/quotes/new'
+      path: '/quotes/new'
+      fullPath: '/quotes/new'
+      preLoaderRoute: typeof AuthenticatedQuotesNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/maintenance/volume-tiers': {
+      id: '/_authenticated/maintenance/volume-tiers'
+      path: '/maintenance/volume-tiers'
+      fullPath: '/maintenance/volume-tiers'
+      preLoaderRoute: typeof AuthenticatedMaintenanceVolumeTiersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/maintenance/users': {
+      id: '/_authenticated/maintenance/users'
+      path: '/maintenance/users'
+      fullPath: '/maintenance/users'
+      preLoaderRoute: typeof AuthenticatedMaintenanceUsersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/maintenance/settings': {
+      id: '/_authenticated/maintenance/settings'
+      path: '/maintenance/settings'
+      fullPath: '/maintenance/settings'
+      preLoaderRoute: typeof AuthenticatedMaintenanceSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/maintenance/item-sets': {
+      id: '/_authenticated/maintenance/item-sets'
+      path: '/maintenance/item-sets'
+      fullPath: '/maintenance/item-sets'
+      preLoaderRoute: typeof AuthenticatedMaintenanceItemSetsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedMaintenanceItemSetsRoute: typeof AuthenticatedMaintenanceItemSetsRoute
+  AuthenticatedMaintenanceSettingsRoute: typeof AuthenticatedMaintenanceSettingsRoute
+  AuthenticatedMaintenanceUsersRoute: typeof AuthenticatedMaintenanceUsersRoute
+  AuthenticatedMaintenanceVolumeTiersRoute: typeof AuthenticatedMaintenanceVolumeTiersRoute
+  AuthenticatedQuotesNewRoute: typeof AuthenticatedQuotesNewRoute
+  AuthenticatedMaintenanceIndexRoute: typeof AuthenticatedMaintenanceIndexRoute
+  AuthenticatedQuotesIndexRoute: typeof AuthenticatedQuotesIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedMaintenanceItemSetsRoute: AuthenticatedMaintenanceItemSetsRoute,
+  AuthenticatedMaintenanceSettingsRoute: AuthenticatedMaintenanceSettingsRoute,
+  AuthenticatedMaintenanceUsersRoute: AuthenticatedMaintenanceUsersRoute,
+  AuthenticatedMaintenanceVolumeTiersRoute:
+    AuthenticatedMaintenanceVolumeTiersRoute,
+  AuthenticatedQuotesNewRoute: AuthenticatedQuotesNewRoute,
+  AuthenticatedMaintenanceIndexRoute: AuthenticatedMaintenanceIndexRoute,
+  AuthenticatedQuotesIndexRoute: AuthenticatedQuotesIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CalculatorRoute: CalculatorRoute,
+  LoginRoute: LoginRoute,
+  QuoteViewQuoteIdRoute: QuoteViewQuoteIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
