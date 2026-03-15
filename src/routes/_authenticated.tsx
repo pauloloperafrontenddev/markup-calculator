@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { supabase } from '../lib/supabase'
-import { TopBar } from '../components/TopBar'
+import { AppSidebar } from '../components/AppSidebar'
 
 // ── Route guard ───────────────────────────────────────────────────────────────
 
@@ -27,8 +27,8 @@ export const Route = createFileRoute('/_authenticated')({
 
 function AuthenticatedLayout() {
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-background">
-      <TopBar />
+    <div className="flex h-screen overflow-hidden bg-background">
+      <AppSidebar />
       <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>

@@ -21,6 +21,7 @@ import { Route as AuthenticatedMaintenanceVolumeTiersRouteImport } from './route
 import { Route as AuthenticatedMaintenanceUsersRouteImport } from './routes/_authenticated/maintenance/users'
 import { Route as AuthenticatedMaintenanceSettingsRouteImport } from './routes/_authenticated/maintenance/settings'
 import { Route as AuthenticatedMaintenanceItemSetsRouteImport } from './routes/_authenticated/maintenance/item-sets'
+import { Route as AuthenticatedCustomersNewRouteImport } from './routes/_authenticated/customers/new'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -87,11 +88,18 @@ const AuthenticatedMaintenanceItemSetsRoute =
     path: '/maintenance/item-sets',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedCustomersNewRoute =
+  AuthenticatedCustomersNewRouteImport.update({
+    id: '/customers/new',
+    path: '/customers/new',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/login': typeof LoginRoute
+  '/customers/new': typeof AuthenticatedCustomersNewRoute
   '/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
   '/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
   '/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calculator': typeof CalculatorRoute
   '/login': typeof LoginRoute
+  '/customers/new': typeof AuthenticatedCustomersNewRoute
   '/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
   '/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
   '/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
@@ -120,6 +129,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/calculator': typeof CalculatorRoute
   '/login': typeof LoginRoute
+  '/_authenticated/customers/new': typeof AuthenticatedCustomersNewRoute
   '/_authenticated/maintenance/item-sets': typeof AuthenticatedMaintenanceItemSetsRoute
   '/_authenticated/maintenance/settings': typeof AuthenticatedMaintenanceSettingsRoute
   '/_authenticated/maintenance/users': typeof AuthenticatedMaintenanceUsersRoute
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/login'
+    | '/customers/new'
     | '/maintenance/item-sets'
     | '/maintenance/settings'
     | '/maintenance/users'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calculator'
     | '/login'
+    | '/customers/new'
     | '/maintenance/item-sets'
     | '/maintenance/settings'
     | '/maintenance/users'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/calculator'
     | '/login'
+    | '/_authenticated/customers/new'
     | '/_authenticated/maintenance/item-sets'
     | '/_authenticated/maintenance/settings'
     | '/_authenticated/maintenance/users'
@@ -266,10 +279,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMaintenanceItemSetsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/customers/new': {
+      id: '/_authenticated/customers/new'
+      path: '/customers/new'
+      fullPath: '/customers/new'
+      preLoaderRoute: typeof AuthenticatedCustomersNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCustomersNewRoute: typeof AuthenticatedCustomersNewRoute
   AuthenticatedMaintenanceItemSetsRoute: typeof AuthenticatedMaintenanceItemSetsRoute
   AuthenticatedMaintenanceSettingsRoute: typeof AuthenticatedMaintenanceSettingsRoute
   AuthenticatedMaintenanceUsersRoute: typeof AuthenticatedMaintenanceUsersRoute
@@ -280,6 +301,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCustomersNewRoute: AuthenticatedCustomersNewRoute,
   AuthenticatedMaintenanceItemSetsRoute: AuthenticatedMaintenanceItemSetsRoute,
   AuthenticatedMaintenanceSettingsRoute: AuthenticatedMaintenanceSettingsRoute,
   AuthenticatedMaintenanceUsersRoute: AuthenticatedMaintenanceUsersRoute,
